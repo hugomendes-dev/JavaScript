@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Addition</title>
+</head>
+<body>
+
+    <input type="number" id="nombre1">
+    <input type="number" id="nombre2">
+    <button onclick="additionner()">Calculer</button>
+
+    <p><span id="resultat"></span></p>
+
+    <script>
+        function additionner() {
+            let a = Number(document.querySelector("#nombre1").value);
+            let b = Number(document.querySelector("#nombre2").value);
+            document.querySelector("#resultat").textContent = "Le résultat de l'addition est : " + (a + b);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opération</title>
+</head>
+<body>
+
+    <input type="number" id="nombre1">
+    <select id="operateur">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+    </select>
+    <input type="number" id="nombre2">
+    <button onclick="calculer()">Calculer</button>
+
+    <p><span id="resultat"></span></p>
+
+    <script>
+        function calculer() {
+            let a = Number(document.querySelector("#nombre1").value);
+            let b = Number(document.querySelector("#nombre2").value);
+            let operateur = document.querySelector("#operateur").value;
+            let message = "";
+
+            if (operateur === "+") {
+                message = "Le résultat de l'addition est : " + (a + b);
+            } else if (operateur === "-") {
+                message = "Le résultat de la soustraction est : " + (a - b);
+            } else if (operateur === "*") {
+                message = "Le résultat de la multiplication est : " + (a * b);
+            } else {
+                message = "Le résultat de la division est : " + (a / b);
+            }
+
+            document.querySelector("#resultat").textContent = message;
+        }
+    </script>
+
+</body>
+</html>
