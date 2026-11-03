@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filtrage polluants</title>
+    <script>
+        let data;
+
+        function init() {
+            let req = new XMLHttpRequest();
+            req.open('GET', 'https://digicode.cleverapps.io/json/pays/pollution');
+            req.onreadystatechange = function () {
+                if (req.readyState == 4 && req.status == 200) {
+                    data = JSON.parse(req.responseText);
+                    document.querySelector("#titre").innerHTML = "Pays les plus polluants pour le " + data.polluant + " (" + data.unite + ")";
+                    document.querySelector("#annee").innerHTML = "en " + data.annee;
+                    afficher(0, Number.MAX_VALUE);
+                }
+            }
+            req.send();
+        }
+
+        function afficher(min, max) {
+            let zoneAffichage = document.querySelector("#corps");
+            zoneAffichage.innerHTML = "";
+            for (let i = 0; i < data.pays.length; i++) {
+                if (data.pays[i].valeur >= min && data.pays[i].valeur <= max) {
+                    zoneAffichage.innerHTML += "<tr>"
+                        + "<td><img src='https://flagcdn.com/24x18/" + data.pays[i].code + ".png'></td>"
+                        + "<td>" + data.pays[i].nom + "</td>"
+                        + "<td>" + data.pays[i].valeur + "</td>"
+                        + "<td>" + data.pays[i].pourcentage + "</td>"
+                        + "</tr>";
+                }
+            }
+        }
+
+        function valider() {
+            let min = document.querySelector("#min").value;
+            let max = document.querySelector("#max").value;
+
+            if (min == "") {
+                min = 0;
+            }
+            if (max == "") {
+                max = Number.MAX_VALUE;
+            }
+
+            min = Number(min);
+            max = Number(max);
+
+            if (min < 0 || max < 0) {
+                alert("Veuillez saisir des valeurs positives");
+                return;
+            }
+            if (min > max) {
+                alert("Le MIN doit être inférieur au MAX");
+                return;
+            }
+
+            afficher(min, max);
+        }
+    </script>
+</head>
+<body onload="init()">
+    <h1 id="titre"></h1>
+    <h2 id="annee"></h2>
+
+    MIN : <input type="number" id="min" name="min">
+    MAX : <input type="number" id="max" name="max">
+    <input type="button" onclick="valider()" value="Valider">
+
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Nom</th>
+                <th>Valeur</th>
+                <th>%</th>
+            </tr>
+        </thead>
+        <tbody id="corps"></tbody>
+    </table>
+</body>
+</html>

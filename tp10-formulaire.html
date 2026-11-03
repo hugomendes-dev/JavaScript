@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des utilisateurs</title>
+    <script>
+        let idCreateur = "Mendes";
+
+        function init() {
+            fetch('https://digicode.cleverapps.io/utilisateurs/')
+            .then(res => res.json())
+            .then(data => {
+                let zoneAffichage = document.querySelector("#corps");
+                zoneAffichage.innerHTML = "";
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i].idCreateur == idCreateur) {
+                        zoneAffichage.innerHTML += "<tr>"
+                            + "<td>" + data[i].nom + "</td>"
+                            + "<td>" + data[i].prenom + "</td>"
+                            + "<td>" + data[i].dateNaissance + "</td>"
+                            + "<td>" + data[i].lieuNaissance + "</td>"
+                            + "<td>" + data[i].numeroRue + " " + data[i].libelleRue + " " + data[i].codePostal + " " + data[i].ville + "</td>"
+                            + "</tr>";
+                    }
+                }
+            });
+        }
+
+        function envoyer() {
+            let utilisateur = {
+                idCreateur: idCreateur,
+                nom: document.querySelector("#nom").value,
+                prenom: document.querySelector("#prenom").value,
+                genre: document.querySelector("[name=genre]:checked").value,
+                dateNaissance: document.querySelector("#dateNaissance").value,
+                lieuNaissance: document.querySelector("#lieuNaissance").value,
+                departementNaissance: document.querySelector("#departementNaissance").value,
+                numeroRue: document.querySelector("#numeroRue").value,
+                libelleRue: document.querySelector("#libelleRue").value,
+                codePostal: document.querySelector("#codePostal").value,
+                ville: document.querySelector("#ville").value
+            };
+
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(utilisateur)
+            };
+
+            fetch('https://digicode.cleverapps.io/utilisateurs/', requestOptions)
+            .then(res => init());
+        }
+    </script>
+</head>
+<body onload="init()">
+
+    <h1>Gestion des utilisateurs</h1>
+
+    <form>
+        Nom : <input type="text" id="nom" name="nom"><br>
+        Prénom : <input type="text" id="prenom" name="prenom"><br>
+
+        Genre :
+        <input type="radio" id="genreH" name="genre" value="Homme" checked>
+        <label for="genreH">Homme</label>
+        <input type="radio" id="genreF" name="genre" value="Femme">
+        <label for="genreF">Femme</label><br>
+
+        Date de naissance : <input type="date" id="dateNaissance" name="dateNaissance"><br>
+        Lieu de naissance : <input type="text" id="lieuNaissance" name="lieuNaissance"><br>
+
+        Département de naissance :
+        <select id="departementNaissance" name="departementNaissance">
+            <option value="30">Gard</option>
+            <option value="34">Hérault</option>
+        </select><br>
+
+        Numéro de rue : <input type="text" id="numeroRue" name="numeroRue"><br>
+        Libellé de la rue : <input type="text" id="libelleRue" name="libelleRue"><br>
+        Code postal : <input type="text" id="codePostal" name="codePostal"><br>
+        Ville : <input type="text" id="ville" name="ville"><br>
+
+        <input type="button" onclick="envoyer()" value="Envoyer">
+    </form>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Date de naissance</th>
+                <th>Lieu de naissance</th>
+                <th>Adresse</th>
+            </tr>
+        </thead>
+        <tbody id="corps"></tbody>
+    </table>
+
+</body>
+</html>
