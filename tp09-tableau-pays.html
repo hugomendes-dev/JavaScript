@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau pays</title>
+    <script>
+        function init() {
+            let req = new XMLHttpRequest();
+            req.open('GET', 'https://digicode.cleverapps.io/json/pays/pollution');
+            req.onreadystatechange = function () {
+                if (req.readyState == 4 && req.status == 200) {
+                    let data = JSON.parse(req.responseText);
+
+                    document.querySelector("#titre").innerHTML = "Pays les plus polluants pour le " + data.polluant + " (" + data.unite + ")";
+                    document.querySelector("#annee").innerHTML = "en " + data.annee;
+
+                    let zoneAffichage = document.querySelector("#corps");
+                    for (let i = 0; i < data.pays.length; i++) {
+                        zoneAffichage.innerHTML += "<tr>"
+                            + "<td><img src='https://flagcdn.com/24x18/" + data.pays[i].code + ".png'></td>"
+                            + "<td>" + data.pays[i].nom + "</td>"
+                            + "<td>" + data.pays[i].valeur + "</td>"
+                            + "<td>" + data.pays[i].pourcentage + "</td>"
+                            + "</tr>";
+                    }
+                }
+            }
+            req.send();
+        }
+    </script>
+</head>
+<body onload="init()">
+    <h1 id="titre"></h1>
+    <h2 id="annee"></h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Nom</th>
+                <th>Valeur</th>
+                <th>%</th>
+            </tr>
+        </thead>
+        <tbody id="corps"></tbody>
+    </table>
+</body>
+</html>
